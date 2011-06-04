@@ -1,9 +1,8 @@
 #!/usr/bin/env ruby
 
 while true
-  temperature = 0
-  File.open('/proc/acpi/ibm/thermal', 'r') { |f| temperature = f.read.split(' ')[1].to_i }
-  level = (temperature > 60 ? 'auto' : '1')
-  system "echo level #{level} > /proc/acpi/ibm/fan"
+  File.open('/proc/acpi/ibm/thermal', 'r') do |f|
+    system "echo level #{(f.read.split(' ')[1].to_i > 60 ? 'auto' : '1')} > /proc/acpi/ibm/fan"
+  end
   sleep 120
 end
